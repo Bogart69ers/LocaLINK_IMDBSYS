@@ -35,7 +35,7 @@ namespace LocaLINK
         public virtual DbSet<User_Account> User_Account { get; set; }
         public virtual DbSet<User_Info> User_Info { get; set; }
         public virtual DbSet<User_Role> User_Role { get; set; }
-        public virtual DbSet<vw_UserRole> vw_UserRole { get; set; }
+        public virtual DbSet<vw_accRole> vw_accRole { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

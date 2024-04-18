@@ -22,7 +22,8 @@ namespace LocaLINK.Utils
     public enum RoleType
     {
         User,
-        Worker
+        Worker,
+        Admin
     }
 
     public enum ProductStatus
@@ -44,6 +45,7 @@ namespace LocaLINK.Utils
     {
         public const string Role_User = "User";
         public const string Role_Worker = "Worker";
+        public const string Role_Admin = "Admin";
 
         public const int ERROR = 1;
         public const int SUCCESS = 0;

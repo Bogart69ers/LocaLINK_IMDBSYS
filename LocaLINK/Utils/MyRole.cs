@@ -45,7 +45,7 @@ namespace LocaLINK
         {
             using (var db = new LOCALinkEntities())
             {
-                return db.vw_UserRole.Select(m => m.user_type).ToArray();
+                return db.vw_accRole.Select(m => m.rolename).ToArray();
             }
         }
 
@@ -53,7 +53,7 @@ namespace LocaLINK
         {
             using (var db = new LOCALinkEntities())
             {
-                return db.vw_UserRole.Where(m => m.user_name == username).Select(m => m.user_type).ToArray();
+                return db.vw_accRole.Where(m => m.username == username).Select(m => m.username).ToArray();
             }
         }
 

@@ -9,6 +9,8 @@
 
 @Html.AntiForgeryToken()
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +34,10 @@
     <link rel="stylesheet" type="text/css" href="/assets/login/main.css">
     <!--===============================================================================================-->
 </head>
+@using (Html.BeginForm())
+{ 
 <body>
+
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
@@ -41,8 +46,7 @@
                 </div>
 
                 <form class="login100-form validate-form">
-                    @using (Html.BeginForm())
-                    {
+                  
                         <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
                         <span class="login100-form-title">
                             Member Login
@@ -79,11 +83,12 @@
                         <div class="container-login100-form-btn">
                             <input type="submit" href="~/Home/SignUp" class="signup100-form-btn" value="Sign Up" />
                         </div>
-                    }
+                    
                 </form>
             </div>
         </div>
     </div>
+
 
 
 
@@ -104,6 +109,5 @@
     </script>
 
 </body>
+}
 </html>
-
-

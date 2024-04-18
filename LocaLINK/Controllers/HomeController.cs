@@ -9,7 +9,7 @@ using System.Web.Security;
 
 namespace LocaLINK.Controllers
 {
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "User, Worker")]
     public class HomeController : BaseController
     {
         [AllowAnonymous]
@@ -54,9 +54,16 @@ namespace LocaLINK.Controllers
                 switch (user.User_Role.rolename)
                 {
                     case Constant.Role_User:
+                        //Ari ilisdi kung asa padung og si user maka login
                         return RedirectToAction("Index");
                     case Constant.Role_Worker:
-                        return RedirectToAction("Index", "Shop");
+                        //Ari ilisdi kung asa padung og si worker maka login
+
+                        return RedirectToAction("Index");
+                    case Constant.Role_Admin:
+                        //Ari ilisdi kung asa padung og si admin maka login
+
+                        return RedirectToAction("Index");
                     default:
                         return RedirectToAction("Index");
                 }
@@ -126,7 +133,7 @@ namespace LocaLINK.Controllers
             TempData["username"] = ua.username;
             return RedirectToAction("Verify");
         }
-
+        [AllowAnonymous]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();

@@ -278,7 +278,7 @@
       <DependentUpon>LocaLINK.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils\Utilities.cs" />
-    <Compile Include="vw_UserRole.cs">
+    <Compile Include="vw_accRole.cs">
       <DependentUpon>LocaLINK.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -411,7 +411,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50100</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50100/</IISUrl>
+          <IISUrl>http://localhost:60100/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

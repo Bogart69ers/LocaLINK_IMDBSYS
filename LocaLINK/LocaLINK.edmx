@@ -92,16 +92,14 @@
           <Property Name="rolename" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="vw_UserRole">
+warning 6002: The table/view 'LOCALink.dbo.vw_accRole' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_accRole">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="user_name" />
-            <PropertyRef Name="user_type" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="user_name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="user_type" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" />
+          <Property Name="rolename" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Booking_Service_Category">
           <End Role="Service_Category" Type="Self.Service_Category" Multiplicity="1" />
@@ -209,12 +207,12 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
           <EntitySet Name="User_Account" EntityType="Self.User_Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Info" EntityType="Self.User_Info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Role" EntityType="Self.User_Role" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="vw_UserRole" EntityType="Self.vw_UserRole" store:Type="Views" store:Schema="dbo">
+          <EntitySet Name="vw_accRole" EntityType="Self.vw_accRole" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-    [vw_UserRole].[id] AS [id], 
-    [vw_UserRole].[user_name] AS [user_name], 
-    [vw_UserRole].[user_type] AS [user_type]
-    FROM [dbo].[vw_UserRole] AS [vw_UserRole]</DefiningQuery>
+    [vw_accRole].[id] AS [id], 
+    [vw_accRole].[username] AS [username], 
+    [vw_accRole].[rolename] AS [rolename]
+    FROM [dbo].[vw_accRole] AS [vw_accRole]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Booking_Service_Category" Association="Self.FK_Booking_Service_Category">
             <End Role="Service_Category" EntitySet="Service_Category" />
@@ -286,7 +284,7 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
           <EntitySet Name="User_Account" EntityType="LOCALinkModel.User_Account" />
           <EntitySet Name="User_Info" EntityType="LOCALinkModel.User_Info" />
           <EntitySet Name="User_Role" EntityType="LOCALinkModel.User_Role" />
-          <EntitySet Name="vw_UserRole" EntityType="LOCALinkModel.vw_UserRole" />
+          <EntitySet Name="vw_accRole" EntityType="LOCALinkModel.vw_accRole" />
           <AssociationSet Name="FK_Booking_Service_Category" Association="LOCALinkModel.FK_Booking_Service_Category">
             <End Role="Service_Category" EntitySet="Service_Category" />
             <End Role="Booking" EntitySet="Booking" />
@@ -415,15 +413,13 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
           <NavigationProperty Name="User_Role1" Relationship="LOCALinkModel.FK_User_Category_User_Category1" FromRole="User_Role" ToRole="User_Role1" />
           <NavigationProperty Name="User_Role2" Relationship="LOCALinkModel.FK_User_Category_User_Category1" FromRole="User_Role1" ToRole="User_Role" />
         </EntityType>
-        <EntityType Name="vw_UserRole">
+        <EntityType Name="vw_accRole">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="user_name" />
-            <PropertyRef Name="user_type" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="user_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="user_type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rolename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Booking_Service_Category">
           <End Type="LOCALinkModel.Service_Category" Role="Service_Category" Multiplicity="1" />
@@ -610,11 +606,11 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="vw_UserRole">
-            <EntityTypeMapping TypeName="LOCALinkModel.vw_UserRole">
-              <MappingFragment StoreEntitySet="vw_UserRole">
-                <ScalarProperty Name="user_type" ColumnName="user_type" />
-                <ScalarProperty Name="user_name" ColumnName="user_name" />
+          <EntitySetMapping Name="vw_accRole">
+            <EntityTypeMapping TypeName="LOCALinkModel.vw_accRole">
+              <MappingFragment StoreEntitySet="vw_accRole">
+                <ScalarProperty Name="rolename" ColumnName="rolename" />
+                <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
