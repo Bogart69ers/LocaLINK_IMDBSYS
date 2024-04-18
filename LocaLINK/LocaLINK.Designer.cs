@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\ANGEL DORIE\OneDrive\Documents\IMDBSYS\LocaLINK\LocaLINK\LocaLINK.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Marvin\Documents\GitHub\AppointmentSystem\LocaLINK_IMDBSYS\LocaLINK\LocaLINK.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
