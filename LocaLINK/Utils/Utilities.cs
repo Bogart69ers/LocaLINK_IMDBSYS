@@ -12,7 +12,7 @@ namespace LocaLINK.Utils
         Success,
         Error
     }
-    public enum Status
+    public enum status
     {
         InActive,
         Active

@@ -40,12 +40,12 @@ namespace LocaLINK.Controllers
             {
                 var user = _userManager.GetUserByUsername(username);
 
-                if (user.status != (Int32)Status.Active)
+                if (user.status != (Int32)status.Active)
                 {
                     TempData["username"] = username;
                     return RedirectToAction("Verify");
                 }
-                //
+                // 
                 FormsAuthentication.SetAuthCookie(username, false);
                 //
                 if (!String.IsNullOrEmpty(ReturnUrl))
@@ -90,7 +90,7 @@ namespace LocaLINK.Controllers
                 return View();
             }
 
-            user.status = (Int32)Status.Active;
+            user.status = (Int32)status.Active;
             _userManager.UpdateUser(user, ref ErrorMessage);
 
             return RedirectToAction("Login");

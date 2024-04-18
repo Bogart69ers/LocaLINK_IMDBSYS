@@ -61,7 +61,7 @@ namespace LocaLINK.Repository
             ua.userId = Utilities.gUid;
             ua.code = Utilities.code.ToString();
             ua.date_created = DateTime.Now;
-            ua.status = (Int32)Status.InActive;
+            ua.status = (Int32)status.InActive;
 
             if (GetUserByUsername(ua.username) != null)
             {
@@ -116,7 +116,7 @@ namespace LocaLINK.Repository
 
             UserInfo = new User_Info();
             UserInfo.userId = User.userId;
-            UserInfo.active = (Int32)Status.Active;
+            UserInfo.active = (Int32)status.Active;
 
             _userInf.Create(UserInfo, out err);
 
