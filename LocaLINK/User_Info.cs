@@ -14,15 +14,18 @@ namespace LocaLINK
     
     public partial class User_Info
     {
-        public int userInfo_id { get; set; }
-        public int user_id { get; set; }
+        public int id { get; set; }
+        public string userId { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
-        public string email { get; set; }
-        public string gender { get; set; }
-        public string address { get; set; }
         public string phone_number { get; set; }
-    
-        public virtual User_Account User_Account { get; set; }
+        public string email { get; set; }
+        public string street { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string zip_code { get; set; }
+        public Nullable<int> active { get; set; }
+        public Nullable<int> storeId { get; set; }
+        public Nullable<int> managerId { get; set; }
     }
 }

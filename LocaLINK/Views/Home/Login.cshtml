@@ -30,9 +30,9 @@
                 <form class="form">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <p class="fieldset">
-                        @Html.LabelFor(model => model.user_name, htmlAttributes: new { @class = "image-replace username", @for = "signin-username" })
-                        @Html.EditorFor(model => model.user_name, new { htmlAttributes = new { @class = "full-width has-padding has-border", @id = "signin-username", @type = "text", @placeholder = "Username", @required = true } })
-                        @Html.ValidationMessageFor(model => model.user_name, "User name not found!", new { @class = "error-message" })
+                        @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "image-replace username", @for = "signin-username" })
+                        @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "full-width has-padding has-border", @id = "signin-username", @type = "text", @placeholder = "Username", @required = true } })
+                        @Html.ValidationMessageFor(model => model.username, "User name not found!", new { @class = "error-message" })
                     </p>
                     <p class="fieldset">
                         @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "image-replace password", @for = "signin-password" })

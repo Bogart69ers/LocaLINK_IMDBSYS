@@ -23,6 +23,5 @@ namespace LocaLINK
     
         public virtual Service_Category Service_Category { get; set; }
         public virtual Status Status1 { get; set; }
-        public virtual User_Account User_Account { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using LocaLINK.Repository;
+﻿using LocaLINK.Models;
+using LocaLINK.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,30 @@ namespace LocaLINK.Controllers
 {
     public class BaseController : Controller
     {
-        public LOCALinkEntities _db;
-        public BaseRepository<User_Account> _userRepo;
-        public BaseRepository<Booking> _booking;
+        public String ErrorMessage;
+        public UserManager _userManager;
+        
+        public String Username { get { return User.Identity.Name; } }
+        public String UserId { get { return _userManager.GetUserByUsername(Username).userId; } }
+
         public BaseController()
         {
-            _db = new LOCALinkEntities();
-            _userRepo = new BaseRepository<User_Account>();
-            _booking = new BaseRepository<Booking>();
+            ErrorMessage = String.Empty;
+            _userManager = new UserManager();
 
+        }
+        public void IsUserLoggedSession()
+        {
+            UserLogged userLogged = new UserLogged();
+            if (User != null)
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    userLogged.UserAccount = _userManager.GetUserByUsername(User.Identity.Name);
+                    userLogged.UserInformation = _userManager.CreateOrRetrieve(userLogged.UserAccount.username, ref ErrorMessage);
+                }
+            }
+            Session["User"] = userLogged;
         }
     }
 }

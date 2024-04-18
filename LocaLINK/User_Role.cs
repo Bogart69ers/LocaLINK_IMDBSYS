@@ -12,18 +12,20 @@ namespace LocaLINK
     using System;
     using System.Collections.Generic;
     
-    public partial class User_Category
+    public partial class User_Role
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User_Category()
+        public User_Role()
         {
-            this.UserRole = new HashSet<UserRole>();
+            this.User_Account = new HashSet<User_Account>();
         }
     
-        public int user_id { get; set; }
-        public string user_type { get; set; }
+        public int roleId { get; set; }
+        public string rolename { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserRole> UserRole { get; set; }
+        public virtual ICollection<User_Account> User_Account { get; set; }
+        public virtual User_Role User_Role1 { get; set; }
+        public virtual User_Role User_Role2 { get; set; }
     }
 }

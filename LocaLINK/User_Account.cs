@@ -14,24 +14,17 @@ namespace LocaLINK
     
     public partial class User_Account
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User_Account()
-        {
-            this.Booking = new HashSet<Booking>();
-            this.User_Info = new HashSet<User_Info>();
-            this.UserRole = new HashSet<UserRole>();
-        }
-    
-        public int user_id { get; set; }
-        public string user_name { get; set; }
+        public int id { get; set; }
+        public string userId { get; set; }
+        public string username { get; set; }
         public string password { get; set; }
-        public int user_type { get; set; }
+        public string email { get; set; }
+        public Nullable<int> roleId { get; set; }
+        public Nullable<int> status { get; set; }
+        public Nullable<System.DateTime> date_created { get; set; }
+        public Nullable<System.DateTime> date_modified { get; set; }
+        public string code { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Booking> Booking { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User_Info> User_Info { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserRole> UserRole { get; set; }
+        public virtual User_Role User_Role { get; set; }
     }
 }

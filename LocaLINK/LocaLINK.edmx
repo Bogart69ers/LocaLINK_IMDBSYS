@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LOCALinkModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="LOCALinkModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Booking">
           <Key>
             <PropertyRef Name="booking_id" />
@@ -53,40 +53,43 @@
         </EntityType>
         <EntityType Name="User_Account">
           <Key>
-            <PropertyRef Name="user_id" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="user_name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="user_type" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="User_Category">
-          <Key>
-            <PropertyRef Name="user_id" />
-          </Key>
-          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="user_type" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="nvarchar(max)" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" />
+          <Property Name="roleId" Type="int" />
+          <Property Name="status" Type="int" />
+          <Property Name="date_created" Type="datetime" />
+          <Property Name="date_modified" Type="datetime" />
+          <Property Name="code" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="User_Info">
-          <Key>
-            <PropertyRef Name="userInfo_id" />
-          </Key>
-          <Property Name="userInfo_id" Type="int" Nullable="false" />
-          <Property Name="user_id" Type="int" Nullable="false" />
-          <Property Name="firstname" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="lastname" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="gender" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="address" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="phone_number" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="UserRole">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="categoryId" Type="int" />
-          <Property Name="userId" Type="int" />
+          <Property Name="userId" Type="nvarchar(max)" />
+          <Property Name="firstname" Type="nvarchar" MaxLength="255" />
+          <Property Name="lastname" Type="nvarchar" MaxLength="255" />
+          <Property Name="phone_number" Type="nvarchar" MaxLength="255" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" />
+          <Property Name="street" Type="nvarchar" MaxLength="255" />
+          <Property Name="city" Type="nvarchar" MaxLength="255" />
+          <Property Name="state" Type="nvarchar" MaxLength="255" />
+          <Property Name="zip_code" Type="nvarchar" MaxLength="5" />
+          <Property Name="active" Type="int" />
+          <Property Name="storeId" Type="int" />
+          <Property Name="managerId" Type="int" />
+        </EntityType>
+        <EntityType Name="User_Role">
+          <Key>
+            <PropertyRef Name="roleId" />
+          </Key>
+          <Property Name="roleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rolename" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -124,18 +127,6 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Booking_User_Account">
-          <End Role="User_Account" Type="Self.User_Account" Multiplicity="1" />
-          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User_Account">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="Booking">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Service_Provider_Service_Category">
           <End Role="Service_Category" Type="Self.Service_Category" Multiplicity="1" />
           <End Role="Service_Provider" Type="Self.Service_Provider" Multiplicity="*" />
@@ -148,51 +139,27 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_User_Info_User_Account">
-          <End Role="User_Account" Type="Self.User_Account" Multiplicity="1" />
-          <End Role="User_Info" Type="Self.User_Info" Multiplicity="*" />
+        <Association Name="FK_User_Account_User_Role">
+          <End Role="User_Role" Type="Self.User_Role" Multiplicity="0..1" />
+          <End Role="User_Account" Type="Self.User_Account" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="User_Account">
-              <PropertyRef Name="user_id" />
+            <Principal Role="User_Role">
+              <PropertyRef Name="roleId" />
             </Principal>
-            <Dependent Role="User_Info">
-              <PropertyRef Name="user_id" />
+            <Dependent Role="User_Account">
+              <PropertyRef Name="roleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserRole_User_Account">
-          <End Role="User_Account" Type="Self.User_Account" Multiplicity="0..1" />
-          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+        <Association Name="FK_User_Category_User_Category1">
+          <End Role="User_Role" Type="Self.User_Role" Multiplicity="1" />
+          <End Role="User_Role1" Type="Self.User_Role" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="User_Account">
-              <PropertyRef Name="user_id" />
+            <Principal Role="User_Role">
+              <PropertyRef Name="roleId" />
             </Principal>
-            <Dependent Role="UserRole">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRole_User_Category">
-          <End Role="User_Category" Type="Self.User_Category" Multiplicity="0..1" />
-          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User_Category">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="UserRole">
-              <PropertyRef Name="categoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRole_UserRole1">
-          <End Role="UserRole" Type="Self.UserRole" Multiplicity="1" />
-          <End Role="UserRole1" Type="Self.UserRole" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="UserRole">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="UserRole1">
-              <PropertyRef Name="id" />
+            <Dependent Role="User_Role1">
+              <PropertyRef Name="roleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -240,9 +207,8 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Account" EntityType="Self.User_Account" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="User_Category" EntityType="Self.User_Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Info" EntityType="Self.User_Info" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Role" EntityType="Self.User_Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="vw_UserRole" EntityType="Self.vw_UserRole" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vw_UserRole].[id] AS [id], 
@@ -258,284 +224,24 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
             <End Role="Status" EntitySet="Status" />
             <End Role="Booking" EntitySet="Booking" />
           </AssociationSet>
-          <AssociationSet Name="FK_Booking_User_Account" Association="Self.FK_Booking_User_Account">
-            <End Role="User_Account" EntitySet="User_Account" />
-            <End Role="Booking" EntitySet="Booking" />
-          </AssociationSet>
           <AssociationSet Name="FK_Service_Provider_Service_Category" Association="Self.FK_Service_Provider_Service_Category">
             <End Role="Service_Category" EntitySet="Service_Category" />
             <End Role="Service_Provider" EntitySet="Service_Provider" />
           </AssociationSet>
-          <AssociationSet Name="FK_User_Info_User_Account" Association="Self.FK_User_Info_User_Account">
+          <AssociationSet Name="FK_User_Account_User_Role" Association="Self.FK_User_Account_User_Role">
+            <End Role="User_Role" EntitySet="User_Role" />
             <End Role="User_Account" EntitySet="User_Account" />
-            <End Role="User_Info" EntitySet="User_Info" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserRole_User_Account" Association="Self.FK_UserRole_User_Account">
-            <End Role="User_Account" EntitySet="User_Account" />
-            <End Role="UserRole" EntitySet="UserRole" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRole_User_Category" Association="Self.FK_UserRole_User_Category">
-            <End Role="User_Category" EntitySet="User_Category" />
-            <End Role="UserRole" EntitySet="UserRole" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRole_UserRole1" Association="Self.FK_UserRole_UserRole1">
-            <End Role="UserRole" EntitySet="UserRole" />
-            <End Role="UserRole1" EntitySet="UserRole" />
+          <AssociationSet Name="FK_User_Category_User_Category1" Association="Self.FK_User_Category_User_Category1">
+            <End Role="User_Role" EntitySet="User_Role" />
+            <End Role="User_Role1" EntitySet="User_Role" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LOCALinkModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Booking">
-          <Key>
-            <PropertyRef Name="booking_id" />
-          </Key>
-          <Property Name="booking_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="customer_id" Type="Int32" Nullable="false" />
-          <Property Name="category_id" Type="Int32" Nullable="false" />
-          <Property Name="booking_date" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="total_price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="status" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Service_Category" Relationship="Self.FK_Booking_Service_Category" FromRole="Booking" ToRole="Service_Category" />
-          <NavigationProperty Name="Status1" Relationship="Self.FK_Booking_Status" FromRole="Booking" ToRole="Status" />
-          <NavigationProperty Name="User_Account" Relationship="Self.FK_Booking_User_Account" FromRole="Booking" ToRole="User_Account" />
-        </EntityType>
-        <EntityType Name="Service_Category">
-          <Key>
-            <PropertyRef Name="category_id" />
-          </Key>
-          <Property Name="category_id" Type="Int32" Nullable="false" />
-          <Property Name="category_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Booking" Relationship="Self.FK_Booking_Service_Category" FromRole="Service_Category" ToRole="Booking" />
-          <NavigationProperty Name="Service_Provider" Relationship="Self.FK_Service_Provider_Service_Category" FromRole="Service_Category" ToRole="Service_Provider" />
-        </EntityType>
-        <EntityType Name="Service_Provider">
-          <Key>
-            <PropertyRef Name="provider_id" />
-          </Key>
-          <Property Name="provider_id" Type="Int32" Nullable="false" />
-          <Property Name="user_id" Type="Int32" Nullable="false" />
-          <Property Name="category_id" Type="Int32" Nullable="false" />
-          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="rating" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="availability" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Service_Category" Relationship="Self.FK_Service_Provider_Service_Category" FromRole="Service_Provider" ToRole="Service_Category" />
-        </EntityType>
-        <EntityType Name="Status">
-          <Key>
-            <PropertyRef Name="status_id" />
-          </Key>
-          <Property Name="status_id" Type="Int32" Nullable="false" />
-          <Property Name="current_status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Booking" Relationship="Self.FK_Booking_Status" FromRole="Status" ToRole="Booking" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="User_Account">
-          <Key>
-            <PropertyRef Name="user_id" />
-          </Key>
-          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="user_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="user_type" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Booking" Relationship="Self.FK_Booking_User_Account" FromRole="User_Account" ToRole="Booking" />
-          <NavigationProperty Name="User_Info" Relationship="Self.FK_User_Info_User_Account" FromRole="User_Account" ToRole="User_Info" />
-          <NavigationProperty Name="UserRole" Relationship="Self.FK_UserRole_User_Account" FromRole="User_Account" ToRole="UserRole" />
-        </EntityType>
-        <EntityType Name="User_Category">
-          <Key>
-            <PropertyRef Name="user_id" />
-          </Key>
-          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="user_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="UserRole" Relationship="Self.FK_UserRole_User_Category" FromRole="User_Category" ToRole="UserRole" />
-        </EntityType>
-        <EntityType Name="User_Info">
-          <Key>
-            <PropertyRef Name="userInfo_id" />
-          </Key>
-          <Property Name="userInfo_id" Type="Int32" Nullable="false" />
-          <Property Name="user_id" Type="Int32" Nullable="false" />
-          <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="phone_number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="User_Account" Relationship="Self.FK_User_Info_User_Account" FromRole="User_Info" ToRole="User_Account" />
-        </EntityType>
-        <EntityType Name="UserRole">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="categoryId" Type="Int32" />
-          <Property Name="userId" Type="Int32" />
-          <NavigationProperty Name="User_Account" Relationship="Self.FK_UserRole_User_Account" FromRole="UserRole" ToRole="User_Account" />
-          <NavigationProperty Name="User_Category" Relationship="Self.FK_UserRole_User_Category" FromRole="UserRole" ToRole="User_Category" />
-          <NavigationProperty Name="UserRole1" Relationship="Self.FK_UserRole_UserRole1" FromRole="UserRole" ToRole="UserRole1" />
-          <NavigationProperty Name="UserRole2" Relationship="Self.FK_UserRole_UserRole1" FromRole="UserRole1" ToRole="UserRole" />
-        </EntityType>
-        <EntityType Name="vw_UserRole">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="user_name" />
-            <PropertyRef Name="user_type" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="user_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="user_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_Booking_Service_Category">
-          <End Role="Service_Category" Type="Self.Service_Category" Multiplicity="1" />
-          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Service_Category">
-              <PropertyRef Name="category_id" />
-            </Principal>
-            <Dependent Role="Booking">
-              <PropertyRef Name="category_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Booking_Status">
-          <End Role="Status" Type="Self.Status" Multiplicity="1" />
-          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status">
-              <PropertyRef Name="status_id" />
-            </Principal>
-            <Dependent Role="Booking">
-              <PropertyRef Name="status" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Booking_User_Account">
-          <End Role="User_Account" Type="Self.User_Account" Multiplicity="1" />
-          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User_Account">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="Booking">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Service_Provider_Service_Category">
-          <End Role="Service_Category" Type="Self.Service_Category" Multiplicity="1" />
-          <End Role="Service_Provider" Type="Self.Service_Provider" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Service_Category">
-              <PropertyRef Name="category_id" />
-            </Principal>
-            <Dependent Role="Service_Provider">
-              <PropertyRef Name="category_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_Info_User_Account">
-          <End Role="User_Account" Type="Self.User_Account" Multiplicity="1" />
-          <End Role="User_Info" Type="Self.User_Info" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User_Account">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="User_Info">
-              <PropertyRef Name="user_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRole_User_Account">
-          <End Role="User_Account" Type="Self.User_Account" Multiplicity="0..1" />
-          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User_Account">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="UserRole">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRole_User_Category">
-          <End Role="User_Category" Type="Self.User_Category" Multiplicity="0..1" />
-          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User_Category">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="UserRole">
-              <PropertyRef Name="categoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRole_UserRole1">
-          <End Role="UserRole" Type="Self.UserRole" Multiplicity="1" />
-          <End Role="UserRole1" Type="Self.UserRole" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="UserRole">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="UserRole1">
-              <PropertyRef Name="id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="LOCALinkEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Booking" EntityType="Self.Booking" />
-          <EntitySet Name="Service_Category" EntityType="Self.Service_Category" />
-          <EntitySet Name="Service_Provider" EntityType="Self.Service_Provider" />
-          <EntitySet Name="Status" EntityType="Self.Status" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="User_Account" EntityType="Self.User_Account" />
-          <EntitySet Name="User_Category" EntityType="Self.User_Category" />
-          <EntitySet Name="User_Info" EntityType="Self.User_Info" />
-          <EntitySet Name="UserRole" EntityType="Self.UserRole" />
-          <EntitySet Name="vw_UserRole" EntityType="Self.vw_UserRole" />
-          <AssociationSet Name="FK_Booking_Service_Category" Association="Self.FK_Booking_Service_Category">
-            <End Role="Service_Category" EntitySet="Service_Category" />
-            <End Role="Booking" EntitySet="Booking" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Booking_Status" Association="Self.FK_Booking_Status">
-            <End Role="Status" EntitySet="Status" />
-            <End Role="Booking" EntitySet="Booking" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Booking_User_Account" Association="Self.FK_Booking_User_Account">
-            <End Role="User_Account" EntitySet="User_Account" />
-            <End Role="Booking" EntitySet="Booking" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Service_Provider_Service_Category" Association="Self.FK_Service_Provider_Service_Category">
-            <End Role="Service_Category" EntitySet="Service_Category" />
-            <End Role="Service_Provider" EntitySet="Service_Provider" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_Info_User_Account" Association="Self.FK_User_Info_User_Account">
-            <End Role="User_Account" EntitySet="User_Account" />
-            <End Role="User_Info" EntitySet="User_Info" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRole_User_Account" Association="Self.FK_UserRole_User_Account">
-            <End Role="User_Account" EntitySet="User_Account" />
-            <End Role="UserRole" EntitySet="UserRole" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRole_User_Category" Association="Self.FK_UserRole_User_Category">
-            <End Role="User_Category" EntitySet="User_Category" />
-            <End Role="UserRole" EntitySet="UserRole" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRole_UserRole1" Association="Self.FK_UserRole_UserRole1">
-            <End Role="UserRole" EntitySet="UserRole" />
-            <End Role="UserRole1" EntitySet="UserRole" />
-          </AssociationSet>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -572,7 +278,36 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-        </EntityContainer>
+          <EntitySet Name="Booking" EntityType="LOCALinkModel.Booking" />
+          <EntitySet Name="Service_Category" EntityType="LOCALinkModel.Service_Category" />
+          <EntitySet Name="Service_Provider" EntityType="LOCALinkModel.Service_Provider" />
+          <EntitySet Name="Status" EntityType="LOCALinkModel.Status" />
+          <EntitySet Name="sysdiagrams" EntityType="LOCALinkModel.sysdiagrams" />
+          <EntitySet Name="User_Account" EntityType="LOCALinkModel.User_Account" />
+          <EntitySet Name="User_Info" EntityType="LOCALinkModel.User_Info" />
+          <EntitySet Name="User_Role" EntityType="LOCALinkModel.User_Role" />
+          <EntitySet Name="vw_UserRole" EntityType="LOCALinkModel.vw_UserRole" />
+          <AssociationSet Name="FK_Booking_Service_Category" Association="LOCALinkModel.FK_Booking_Service_Category">
+            <End Role="Service_Category" EntitySet="Service_Category" />
+            <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Booking_Status" Association="LOCALinkModel.FK_Booking_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_Provider_Service_Category" Association="LOCALinkModel.FK_Service_Provider_Service_Category">
+            <End Role="Service_Category" EntitySet="Service_Category" />
+            <End Role="Service_Provider" EntitySet="Service_Provider" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Account_User_Role" Association="LOCALinkModel.FK_User_Account_User_Role">
+            <End Role="User_Role" EntitySet="User_Role" />
+            <End Role="User_Account" EntitySet="User_Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Category_User_Category1" Association="LOCALinkModel.FK_User_Category_User_Category1">
+            <End Role="User_Role" EntitySet="User_Role" />
+            <End Role="User_Role1" EntitySet="User_Role" />
+          </AssociationSet>
+          </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
           <Property Type="Binary" Name="definition" Nullable="true" />
@@ -584,113 +319,178 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-      </Schema>
+        <EntityType Name="Booking">
+          <Key>
+            <PropertyRef Name="booking_id" />
+          </Key>
+          <Property Name="booking_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customer_id" Type="Int32" Nullable="false" />
+          <Property Name="category_id" Type="Int32" Nullable="false" />
+          <Property Name="booking_date" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="total_price" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Service_Category" Relationship="LOCALinkModel.FK_Booking_Service_Category" FromRole="Booking" ToRole="Service_Category" />
+          <NavigationProperty Name="Status1" Relationship="LOCALinkModel.FK_Booking_Status" FromRole="Booking" ToRole="Status" />
+        </EntityType>
+        <EntityType Name="Service_Category">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="Int32" Nullable="false" />
+          <Property Name="category_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Booking" Relationship="LOCALinkModel.FK_Booking_Service_Category" FromRole="Service_Category" ToRole="Booking" />
+          <NavigationProperty Name="Service_Provider" Relationship="LOCALinkModel.FK_Service_Provider_Service_Category" FromRole="Service_Category" ToRole="Service_Provider" />
+        </EntityType>
+        <EntityType Name="Service_Provider">
+          <Key>
+            <PropertyRef Name="provider_id" />
+          </Key>
+          <Property Name="provider_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="category_id" Type="Int32" Nullable="false" />
+          <Property Name="location" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rating" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="availability" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Service_Category" Relationship="LOCALinkModel.FK_Service_Provider_Service_Category" FromRole="Service_Provider" ToRole="Service_Category" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="status_id" />
+          </Key>
+          <Property Name="status_id" Type="Int32" Nullable="false" />
+          <Property Name="current_status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Booking" Relationship="LOCALinkModel.FK_Booking_Status" FromRole="Status" ToRole="Booking" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User_Account">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="roleId" Type="Int32" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="date_created" Type="DateTime" Precision="3" />
+          <Property Name="date_modified" Type="DateTime" Precision="3" />
+          <Property Name="code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User_Role" Relationship="LOCALinkModel.FK_User_Account_User_Role" FromRole="User_Account" ToRole="User_Role" />
+        </EntityType>
+        <EntityType Name="User_Info">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="firstname" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="lastname" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="phone_number" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="state" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="zip_code" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="active" Type="Int32" />
+          <Property Name="storeId" Type="Int32" />
+          <Property Name="managerId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="User_Role">
+          <Key>
+            <PropertyRef Name="roleId" />
+          </Key>
+          <Property Name="roleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rolename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User_Account" Relationship="LOCALinkModel.FK_User_Account_User_Role" FromRole="User_Role" ToRole="User_Account" />
+          <NavigationProperty Name="User_Role1" Relationship="LOCALinkModel.FK_User_Category_User_Category1" FromRole="User_Role" ToRole="User_Role1" />
+          <NavigationProperty Name="User_Role2" Relationship="LOCALinkModel.FK_User_Category_User_Category1" FromRole="User_Role1" ToRole="User_Role" />
+        </EntityType>
+        <EntityType Name="vw_UserRole">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="user_name" />
+            <PropertyRef Name="user_type" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="user_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="user_type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Booking_Service_Category">
+          <End Type="LOCALinkModel.Service_Category" Role="Service_Category" Multiplicity="1" />
+          <End Type="LOCALinkModel.Booking" Role="Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service_Category">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Booking_Status">
+          <End Type="LOCALinkModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="LOCALinkModel.Booking" Role="Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="status_id" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_Provider_Service_Category">
+          <End Type="LOCALinkModel.Service_Category" Role="Service_Category" Multiplicity="1" />
+          <End Type="LOCALinkModel.Service_Provider" Role="Service_Provider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service_Category">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="Service_Provider">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Account_User_Role">
+          <End Type="LOCALinkModel.User_Role" Role="User_Role" Multiplicity="0..1" />
+          <End Type="LOCALinkModel.User_Account" Role="User_Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Role">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="User_Account">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Category_User_Category1">
+          <End Type="LOCALinkModel.User_Role" Role="User_Role" Multiplicity="1" />
+          <End Type="LOCALinkModel.User_Role" Role="User_Role1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User_Role">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="User_Role1">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="LOCALinkModelStoreContainer" CdmEntityContainer="LOCALinkEntities">
-          <EntitySetMapping Name="Booking">
-            <EntityTypeMapping TypeName="LOCALinkModel.Booking">
-              <MappingFragment StoreEntitySet="Booking">
-                <ScalarProperty Name="booking_id" ColumnName="booking_id" />
-                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
-                <ScalarProperty Name="category_id" ColumnName="category_id" />
-                <ScalarProperty Name="booking_date" ColumnName="booking_date" />
-                <ScalarProperty Name="total_price" ColumnName="total_price" />
-                <ScalarProperty Name="status" ColumnName="status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Service_Category">
-            <EntityTypeMapping TypeName="LOCALinkModel.Service_Category">
-              <MappingFragment StoreEntitySet="Service_Category">
-                <ScalarProperty Name="category_id" ColumnName="category_id" />
-                <ScalarProperty Name="category_name" ColumnName="category_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Service_Provider">
-            <EntityTypeMapping TypeName="LOCALinkModel.Service_Provider">
-              <MappingFragment StoreEntitySet="Service_Provider">
-                <ScalarProperty Name="provider_id" ColumnName="provider_id" />
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="category_id" ColumnName="category_id" />
-                <ScalarProperty Name="location" ColumnName="location" />
-                <ScalarProperty Name="rating" ColumnName="rating" />
-                <ScalarProperty Name="availability" ColumnName="availability" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Status">
-            <EntityTypeMapping TypeName="LOCALinkModel.Status">
-              <MappingFragment StoreEntitySet="Status">
-                <ScalarProperty Name="status_id" ColumnName="status_id" />
-                <ScalarProperty Name="current_status" ColumnName="current_status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="LOCALinkModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="User_Account">
-            <EntityTypeMapping TypeName="LOCALinkModel.User_Account">
-              <MappingFragment StoreEntitySet="User_Account">
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="user_name" ColumnName="user_name" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="user_type" ColumnName="user_type" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="User_Category">
-            <EntityTypeMapping TypeName="LOCALinkModel.User_Category">
-              <MappingFragment StoreEntitySet="User_Category">
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="user_type" ColumnName="user_type" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="User_Info">
-            <EntityTypeMapping TypeName="LOCALinkModel.User_Info">
-              <MappingFragment StoreEntitySet="User_Info">
-                <ScalarProperty Name="userInfo_id" ColumnName="userInfo_id" />
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="firstname" ColumnName="firstname" />
-                <ScalarProperty Name="lastname" ColumnName="lastname" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="phone_number" ColumnName="phone_number" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserRole">
-            <EntityTypeMapping TypeName="LOCALinkModel.UserRole">
-              <MappingFragment StoreEntitySet="UserRole">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vw_UserRole">
-            <EntityTypeMapping TypeName="LOCALinkModel.vw_UserRole">
-              <MappingFragment StoreEntitySet="vw_UserRole">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="user_name" ColumnName="user_name" />
-                <ScalarProperty Name="user_type" ColumnName="user_type" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="LOCALinkModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_bookingshesh" FunctionName="LOCALinkModel.Store.sp_bookingshesh" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="LOCALinkModel.Store.sp_creatediagram" />
@@ -716,7 +516,110 @@ warning 6002: The table/view 'LOCALink.dbo.vw_UserRole' does not have a primary 
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="LOCALinkModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="LOCALinkModel.Store.sp_upgraddiagrams" />
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Booking">
+            <EntityTypeMapping TypeName="LOCALinkModel.Booking">
+              <MappingFragment StoreEntitySet="Booking">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="total_price" ColumnName="total_price" />
+                <ScalarProperty Name="booking_date" ColumnName="booking_date" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="booking_id" ColumnName="booking_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Service_Category">
+            <EntityTypeMapping TypeName="LOCALinkModel.Service_Category">
+              <MappingFragment StoreEntitySet="Service_Category">
+                <ScalarProperty Name="category_name" ColumnName="category_name" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Service_Provider">
+            <EntityTypeMapping TypeName="LOCALinkModel.Service_Provider">
+              <MappingFragment StoreEntitySet="Service_Provider">
+                <ScalarProperty Name="availability" ColumnName="availability" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="provider_id" ColumnName="provider_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="LOCALinkModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="current_status" ColumnName="current_status" />
+                <ScalarProperty Name="status_id" ColumnName="status_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="LOCALinkModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Account">
+            <EntityTypeMapping TypeName="LOCALinkModel.User_Account">
+              <MappingFragment StoreEntitySet="User_Account">
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="date_modified" ColumnName="date_modified" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Info">
+            <EntityTypeMapping TypeName="LOCALinkModel.User_Info">
+              <MappingFragment StoreEntitySet="User_Info">
+                <ScalarProperty Name="managerId" ColumnName="managerId" />
+                <ScalarProperty Name="storeId" ColumnName="storeId" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="zip_code" ColumnName="zip_code" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone_number" ColumnName="phone_number" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Role">
+            <EntityTypeMapping TypeName="LOCALinkModel.User_Role">
+              <MappingFragment StoreEntitySet="User_Role">
+                <ScalarProperty Name="rolename" ColumnName="rolename" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_UserRole">
+            <EntityTypeMapping TypeName="LOCALinkModel.vw_UserRole">
+              <MappingFragment StoreEntitySet="vw_UserRole">
+                <ScalarProperty Name="user_type" ColumnName="user_type" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
