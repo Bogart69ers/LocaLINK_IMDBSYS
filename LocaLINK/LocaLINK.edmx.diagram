@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="03922646cb504de5884dd7573e16e158" Name="Diagram1">
+        <EntityTypeShape EntityType="LOCALinkModel.Booking" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="LOCALinkModel.Service_Category" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LOCALinkModel.Service_Provider" Width="1.5" PointX="3" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="LOCALinkModel.Status" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LOCALinkModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LOCALinkModel.User_Account" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LOCALinkModel.User_Category" Width="1.5" PointX="3.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="LOCALinkModel.User_Info" Width="1.5" PointX="3" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="LOCALinkModel.UserRole" Width="1.5" PointX="6" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LOCALinkModel.vw_UserRole" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="LOCALinkModel.FK_Booking_Service_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="LOCALinkModel.FK_Booking_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="LOCALinkModel.FK_Booking_User_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="LOCALinkModel.FK_Service_Provider_Service_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="LOCALinkModel.FK_User_Info_User_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="LOCALinkModel.FK_UserRole_User_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="LOCALinkModel.FK_UserRole_User_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="LOCALinkModel.FK_UserRole_UserRole1" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
