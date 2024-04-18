@@ -45,7 +45,7 @@ namespace LocaLINK.Controllers
                     TempData["username"] = username;
                     return RedirectToAction("Verify");
                 }
-                //
+                // 
                 FormsAuthentication.SetAuthCookie(username, false);
                 //
                 if (!String.IsNullOrEmpty(ReturnUrl))

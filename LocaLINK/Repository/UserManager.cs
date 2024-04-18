@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using static LocaLINK.Utils.Utilities;
 
 namespace LocaLINK.Repository
 {
@@ -60,7 +61,8 @@ namespace LocaLINK.Repository
             ua.userId = Utilities.gUid;
             ua.code = Utilities.code.ToString();
             ua.date_created = DateTime.Now;
-            ua.status = (Int32)Stats.InActive;
+            ua.status = (Int32)status.InActive;
+
             if (GetUserByUsername(ua.username) != null)
             {
                 errMsg = "Username Already Exist";
@@ -114,7 +116,7 @@ namespace LocaLINK.Repository
 
             UserInfo = new User_Info();
             UserInfo.userId = User.userId;
-            UserInfo.active = (Int32)Stats.Active;
+            UserInfo.active = (Int32)status.Active;
 
             _userInf.Create(UserInfo, out err);
 
